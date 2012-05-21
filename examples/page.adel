@@ -1,0 +1,8 @@
+@page(title: "hello world", encoding: "utf-8"){
+    @h1{"hello there!"}
+
+    "some other text
+    with new lines"
+
+    @user(name: "marianoguerra", age: 26, single: true, weight: 66.7)
+}

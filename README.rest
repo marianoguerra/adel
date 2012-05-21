@@ -1,0 +1,133 @@
+adel - markup/data thing
+========================
+
+TODO: have a description for the project
+
+adel is a way to describe markup that can be then exported to different
+formats like html/xml/json etc
+
+the objective of this project is to provide a way to express higher level
+abstractions for data that later can be expanded to the lower representation.
+
+imagine some kind of lisp-like macros for markup that allows you describing
+higher level concepts and then expand it to the base representation like HTML.
+
+for example, how many times have you written a list of links in html, the structure
+is the same all the time, the only thing that changes is the link data and maybe
+a class and id, wouldn't it be nice to write::
+
+        @link-list(class: 'my-list-class') {
+          @link-item(ref: "http://google.com", label: "google")
+          @link-item(ref: "http://yahoo.com", label: "yahoo")
+          @link-item(ref: "http://bing.com", label: "bing")
+        }
+
+and let it then be expanded to::
+
+        <ul class="my-list-class">
+         <li><a href="http://google.com">google</a></li>
+         <li><a href="http://yahoo.com">yahoo</a></li>
+         <li><a href="http://bing.com">bing</a></li>
+        </ul>
+
+the idea is not to make it shorter or easier to type (maybe easier to type :P)
+but to make the structure express the concepts and then let the library do
+the dirty job.
+
+another one, do you remember all the attributes needed to include a css stylesheet? why?
+
+wouldn't it be easier to write something like::
+
+
+        @page(title: "my website") {
+         @head{
+          @css(path: "css/main.css")
+          @css(path: "css/fonts.css")
+
+          @js(path: "js/jquery.js")
+          @js(path: "js/json2.js")
+         }
+
+         @body{
+          @h1{"welcome to zombo.com"}
+
+          @navbar{
+           @nav-link(ref: "#home", label: "home", selected: true)
+           @nav-link(ref: "#about", label: "about")
+           @nav-link(ref: "#contact", label: "contact")
+          }
+
+          @articles{
+           @article(title: "second post", author: "Mariano") {
+            "this is some content"
+           }
+
+           @article(title: "first post", author: "Mariano") {
+            "hello world"
+           }
+          }
+         }
+        }
+
+and let it expand to whatever should expand? 
+isn't it easy to know what that markup is?
+
+moreover, loading different expansions you can generate different HTML outputs,
+mobile HTML, xml, txt and rss files from the same source.
+
+is it finished?
+---------------
+
+the parsing and export to xml/html is finished, the expansions aren't.
+
+who?
+----
+
+marianoguerra
+
+why?
+----
+
+* I'm tired of having to lookup how to add a reference to an external css source.
+* I'm tired of having to write the same list of links using ul/li/a and spans
+* I'm tired of not reusing things like a base page to start a jqueryui prototype that already contains
+  
+  * jquery
+  * jqueryui
+  * json2
+  * html5 shim
+  * normalize.css
+  * jgrowl
+  * etc
+
+why erlang?
+-----------
+
+because it's a cool language, you should try it
+
+why not efene?
+--------------
+
+I don't want to force my language into others (but you should have a look at it :)
+
+http://github.com/marianoguerra/efene
+
+how?
+----
+
+clone the repo::
+
+        git clone https://github.com/marianoguerra/adel.git
+
+build::
+
+        rebar compile
+        
+test::
+
+        rebar eunit
+
+license
+-------
+
+MIT + optional beer to the creator

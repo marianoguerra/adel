@@ -1,0 +1,5 @@
+.eunit
+ebin
+src/adel_lexer.erl
+src/adel_parser.erl
+erl_crash.dump

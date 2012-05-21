@@ -1,0 +1,5 @@
+{application, adel, [
+  {description, "data/markup thing"},
+  {vsn, "0.0.1"},
+  {env, []}
+]}.
