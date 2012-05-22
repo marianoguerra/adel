@@ -75,8 +75,8 @@ expand(Ast) ->
 expand([], Accum) ->
     lists:reverse(Accum);
 
-expand([{cons, {identifier, _Line, FunName}, Args}|T], Accum) ->
-    Result = adel_funs:apply(FunName, Args),
+expand([{cons, _First, _Rest}=Expr|T], Accum) ->
+    Result = adel_funs:eval(Expr),
 
     expand(T, [Result|Accum]);
 

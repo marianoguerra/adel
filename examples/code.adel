@@ -14,6 +14,11 @@
         " " 
         false)
 
+    
+    @(append 
+        @p{"hey "} 
+        @(append @span{"you"} " there"))
+
     "some other text
     with new lines"
 
