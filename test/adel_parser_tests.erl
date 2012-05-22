@@ -89,3 +89,11 @@ tag_attrs_and_childs_test() ->
 
     check("@" ++ StrAttrs ++ StrChilds,
           tag('', Attrs, Childs)).
+
+var_test() ->
+    check("$foo", {var, foo}).
+
+code_test() ->
+    check("@(append 1 2)", {cons, {identifier, 1, append},
+                            {cons, {integer, 1, 1},
+                             {cons, {integer, 1, 2}, nil}}}).
