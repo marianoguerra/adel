@@ -1,0 +1,21 @@
+@page(title: "hello world", encoding: "utf-8"){
+    @h1{"hello there!"}
+
+    @(append 
+        @p{"asd"} 
+        "! "
+        @span(class: "asd"){"hello"}
+        " "
+        1
+        " "
+        2.5
+        " "
+        true
+        " " 
+        false)
+
+    "some other text
+    with new lines"
+
+    @user(name: "marianoguerra", age: 26, single: true, weight: 66.7)
+}

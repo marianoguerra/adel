@@ -54,6 +54,10 @@ string_test() ->
     check("\"\"", {string, 1, ""}),
     check("\"asd\"", {string, 1, "asd"}).
 
+var_test() ->
+    check("$foo", [{varprefix, 1, '$'}, {identifier, 1, 'foo'}]),
+    check("$foo1-ASD", [{varprefix, 1, '$'}, {identifier, 1, 'foo1-ASD'}]).
+
 tag_test() ->
     check("@page(title: \"hello\", encoding: \"utf-8\") { \"hi\" }",
           [{tagprefix, 1, '@'},

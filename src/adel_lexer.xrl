@@ -44,6 +44,7 @@ Rules.
 {False}                  : make_token(bool, TokenLine, false).
 {Identifier}             : make_token(identifier, TokenLine, TokenChars).
 @                        : make_token(tagprefix,  TokenLine, TokenChars).
+\$                       : make_token(varprefix,  TokenLine, TokenChars).
 
 % spaces, tabs and new lines
 {Whites}                 : {token, {white, TokenLine, TokenChars}}.

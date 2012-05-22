@@ -1,6 +1,6 @@
 -module(adel).
 
--export([get_tokens/1, get_ast/1, run/1, to_xmerl/1, to_xml/1]).
+-export([get_tokens/1, get_ast/1, run/1, to_xmerl/1, to_xml/1, expand/1]).
 
 get_tokens(String) ->
     case adel_lexer:string(String) of
@@ -69,6 +69,25 @@ file_to_string(Path) ->
 
     binary_to_list(Content).
 
+expand(Ast) ->
+    expand(Ast, []).
+
+expand([], Accum) ->
+    lists:reverse(Accum);
+
+expand([{cons, {identifier, _Line, FunName}, Args}|T], Accum) ->
+    Result = adel_funs:apply(FunName, Args),
+
+    expand(T, [Result|Accum]);
+
+expand([{tag, Name, Attrs, Body}|T], Accum) ->
+    Result = {tag, Name, Attrs, expand(Body)},
+
+    expand(T, [Result|Accum]);
+
+expand([H|T], Accum) ->
+    expand(T, [H|Accum]).
+
 to_xmerl_single({tag, '', Attrs, Childs}) ->
     {'div', to_xmerl(Attrs), to_xmerl(Childs)};
 
@@ -77,6 +96,25 @@ to_xmerl_single({tag, '!white', _Attrs, Data}) ->
 
 to_xmerl_single({tag, '!string', _Attrs, Data}) ->
     Data;
+
+% TODO: don't know if this nodes should reach this place in this
+% form
+to_xmerl_single({string, _Line, Data}) ->
+    Data;
+
+to_xmerl_single({integer, _Line, Data}) ->
+    integer_to_list(Data);
+
+to_xmerl_single({float, _Line, Data}) ->
+    float_to_list(Data);
+
+to_xmerl_single({bool, _Line, true}) ->
+    "true";
+
+to_xmerl_single({bool, _Line, false}) ->
+    "false";
+
+% /TODO
 
 to_xmerl_single({tag, Name, Attrs, Childs}) ->
     {Name, to_xmerl(Attrs), to_xmerl(Childs)};
@@ -114,17 +152,26 @@ run(["tokens", Path]) ->
 run(["ast", Path]) ->
     io:format("~p~n", [get_ast(file_to_string(Path))]);
 
+run(["expand", Path]) ->
+    Data = file_to_string(Path),
+    {ok, Ast, _} = get_ast(Data),
+    Expanded = expand(Ast),
+
+    io:format("~p~n", [Expanded]);
+
 run(["xmerl", Path]) ->
     Data = file_to_string(Path),
     {ok, Ast, _} = get_ast(Data),
-    Xmerl = to_xmerl(Ast),
+    Expanded = expand(Ast),
+    Xmerl = to_xmerl(Expanded),
 
     io:format("~p~n", [Xmerl]);
 
 run(["xml", Path]) ->
     Data = file_to_string(Path),
     {ok, Ast, _} = get_ast(Data),
-    Xmerl = to_xmerl(Ast),
+    Expanded = expand(Ast),
+    Xmerl = to_xmerl(Expanded),
     Xml = to_xml(Xmerl),
 
     io:format("~s~n", [Xml]).
